@@ -17,8 +17,15 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('last_name');
+            $table->date('birth_date');
+            $table->unsignedBigInteger('group_id');
             $table->rememberToken();
             $table->timestamps();
+            $table->foreign('group_id')->on('user_groups')
+                ->references('group_id')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
