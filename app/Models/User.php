@@ -7,6 +7,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $last_name
+ * @property string $email
+ * @property string $password
+ * @property int $group_id
+ * @property date $birth_date
+ * @property UserGroups $Group
+ */
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -21,6 +31,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'group_id',
+        'birth_date',
+        'last_name',
     ];
 
     /**
@@ -44,5 +57,8 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function Group() {
+        return $this->hasOne(UserGroups::class,'group_id','group_id');
     }
 }
