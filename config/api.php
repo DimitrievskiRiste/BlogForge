@@ -3,5 +3,7 @@ return [
     /**
      * Defined allowed hosts for accessing API Routes.
      */
-    "allowed_hosts" => []
+    "allowed_hosts" => [
+        "localhost"
+    ]
 ];
