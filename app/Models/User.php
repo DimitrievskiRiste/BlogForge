@@ -13,6 +13,7 @@ use Illuminate\Notifications\Notifiable;
  * @property string $last_name
  * @property string $email
  * @property string $password
+ * @property boolean $email_verified
  * @property int $group_id
  * @property date $birth_date
  * @property UserGroups $Group
@@ -34,6 +35,7 @@ class User extends Authenticatable
         'group_id',
         'birth_date',
         'last_name',
+        'email_verified'
     ];
 
     /**
