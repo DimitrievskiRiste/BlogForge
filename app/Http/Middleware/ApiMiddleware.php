@@ -17,17 +17,18 @@ class ApiMiddleware
     {
         //return $next($request);
         $hosts = config("api.allowed_hosts");
-        $ip = $request->getClientIp();
+        $ip = $request->getHost();
         putenv('RES_OPTIONS=retrans:1 retry:1 timeout:1 attempts:1');
         if(!empty($hosts)) {
             foreach($hosts as $host){
-                $hostIp = gethostbyname($host);
-                if($hostIp == $ip){
+                if($host == $ip){
                     return $next($request);
                 }
             }
             return Response("Not allowed",403);
         }
-        return Response("Not a valid domain", 403);
+        $ip = $request->getClientIp();
+        $host = gethostbyaddr($ip);
+        return Response("Not a valid domain  \n IP: $ip Host: $host", 403);
     }
 }
