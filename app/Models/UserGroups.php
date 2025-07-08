@@ -26,6 +26,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $can_edit_self_comment
  * @property boolean $can_change_settings
  * @property boolean $can_manage_admins
+ * @property boolean $can_upload_attachments
+ * @property boolean $can_remove_self_attachments
+ * @property boolean $can_remove_attachments
  */
 class UserGroups extends Model
 {
@@ -51,6 +54,9 @@ class UserGroups extends Model
         "can_delete_self_comment",
         "can_edit_self_comment",
         "can_change_settings",
-        "can_manage_admins"
+        "can_manage_admins",
+        "can_upload_attachments",
+        "can_remove_self_attachments",
+        "can_remove_attachments"
     ];
 }
