@@ -9,11 +9,19 @@ Route::get('/', function () {
 /**
  * API Routes
  */
-Route::middleware(\App\Http\Middleware\ApiMiddleware::class)->prefix("/api")->group(function(){
+Route::middleware(\App\Http\Middleware\ApiMiddleware::class)->prefix("api")->withoutMiddleware([\App\Http\Middleware\AuthorizeAPI::class])->group(function(){
     /**
      * Route for handling login with JWT token
      */
    Route::controller(\App\Http\Controllers\LoginController::class)->group(function(){
        Route::post("/login", 'login');
    });
+   // Authorized API Routes. Required JWT Token for access
+   Route::middleware("auth.api")->group(function() {
+       // AttachmentsController routes
+       Route::controller(\App\Http\Controllers\AttachmentsController::class)->group(function(){
+           Route::post("/attachments/upload", 'upload');
+       });
+   });
+
 });
