@@ -13,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->append(ApiMiddleware::class);
+        $middleware->append(\App\Http\Middleware\AuthorizeAPI::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
