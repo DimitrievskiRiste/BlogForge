@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('last_name');
             $table->date('birth_date');
+            $table->string("token_password");
             $table->unsignedBigInteger('group_id');
             $table->rememberToken();
             $table->timestamps();
