@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
@@ -21,17 +22,26 @@ class AuthorizeAPI
     public function handle(Request $request, Closure $next): Response
     {
         // Check if we have authorization header and secret key of JWT token
-        if($request->hasHeader("Authorization") && $request->hasHeader("Authorization-Pass")){
+        if($request->hasHeader("Authorization") && $request->hasHeader("Authorization-Pass")
+         && $request->hasHeader("Token-Pass")){
             $headerData = explode(" ", $request->header("Authorization"));
             // check if authorization is bearer!
             if((stripos($headerData[0], "Bearer") !== false) && array_key_exists(1, $headerData)){
                 $jwtToken = $headerData[1];
                 $secretKey = $request->header("Authorization-Pass");
+                $tokenPass = $request->header("Token-Pass");
                 // let's check if jwt token is valid
                 try {
                     (array) $token = JWT::decode($jwtToken, new Key($secretKey, "HS256"));
+
                     if(array_key_exists('user', $token)) {
-                        return $next($request);
+                        $member = $this->findUser($token['user']);
+                        if(password_verify($tokenPass, $member->token_password)){
+                            return $next($request);
+                        }
+                        return response()->json(['errors' => [
+                            'unauthorized_token' => 'This token is not signed!'
+                        ]], 403);
                     } else {
                         return response()->json(['errors' => [
                             'malformed_token' => 'The token is not valid!'
@@ -63,5 +73,15 @@ class AuthorizeAPI
         return response()->json(['errors' => [
             'missing_token_or_key' => 'Missing JWT Token or secret key!'
         ]], 403);
+    }
+
+    /**
+     * Find authenticated user
+     * @param int $userId
+     * @return User|null
+     */
+    #[NoDiscard("Method find user must be consumed!")]
+    private function findUser(int $userId) :User|null {
+        return User::query()->find($userId) ?? null;
     }
 }
