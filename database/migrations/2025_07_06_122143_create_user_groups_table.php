@@ -33,6 +33,9 @@ return new class extends Migration
             $table->boolean("can_edit_self_comment")->default(true);
             $table->boolean("can_change_settings")->default(false);
             $table->boolean("can_manage_admins")->default(false);
+            $table->boolean("can_upload_attachments")->default(true);
+            $table->boolean("can_remove_self_attachments")->default(true);
+            $table->boolean("can_remove_attachments")->default(false);
             $table->timestamps();
         });
     }
