@@ -80,7 +80,6 @@ class AuthorizeAPI
      * @param int $userId
      * @return User|null
      */
-    #[NoDiscard("Method find user must be consumed!")]
     private function findUser(int $userId) :User|null {
         return User::query()->find($userId) ?? null;
     }
