@@ -27,12 +27,7 @@ class LoginController extends Controller
                 $payload = [
                     'iss' => url("/api/"),
                     'exp' => $exp,
-                    'user' => [
-                        'user_id' => $user->id,
-                        'name' => $user->name,
-                        'last_name' => $user->last_name,
-                        'group' => $user->Group
-                    ]
+                    'user' => $user->id
                 ];
                 $jwtToken = JWT::encode($payload,$secretKey, 'HS256');
                 return Response()->json(['token' => $jwtToken, 'exp' => $exp, 'secret' => $secretKey], 200);
