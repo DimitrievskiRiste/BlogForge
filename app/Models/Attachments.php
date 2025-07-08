@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * @property int $attachment_id
  * @property string $attachment_name
  * @property string $attachment_ext
  * @property string $mime_type
