@@ -17,8 +17,8 @@ return new class extends Migration
             $table->boolean('registration_enabled')->default(true);
             $table->boolean('verify_email_address')->default(true);
             $table->integer("registration_min_age");
-            $table->unsignedBigInteger("logo_path");
-            $table->foreign("logo_path")
+            $table->unsignedBigInteger("attachment_id");
+            $table->foreign("website_logo")
                 ->on("attachments")
                 ->references('attachment_id')
                 ->onDelete('cascade')
