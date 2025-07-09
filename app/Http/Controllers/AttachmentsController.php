@@ -6,13 +6,15 @@ use App\Models\Attachments;
 use App\Models\User;
 use App\Models\UserAttachments;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class AttachmentsController extends Controller
 {
-    public function upload(Request $request)  {
+    public function upload(Request $request): \Illuminate\Http\JsonResponse
+    {
         try {
             $header = explode(" ", $request->header("Authorization"));
             list(1 => $token) = $header;
