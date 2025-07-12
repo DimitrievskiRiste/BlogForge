@@ -16,13 +16,9 @@ class AttachmentsController extends Controller
     public function upload(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
-            $header = explode(" ", $request->header("Authorization"));
-            list(1 => $token) = $header;
-            $secretPass = $request->header("Authorization-Pass");
-            $jwtToken = JWT::decode($token, new Key($secretPass, "HS256"));
-            $user = $this->findMember($jwtToken->user);
-            if($user) {
-                if(!$user->Group->can_upload_attachments){
+            $user = $this->getAuthenticatedAPIUser($request);
+            if(array_key_exists('user', $user)) {
+                if(!$user['user']->Group->can_upload_attachments){
                     return response()->json([
                         'error' => true,
                         'message' => 'Missing permission can_upload_attachments, action aborted!'
@@ -48,7 +44,7 @@ class AttachmentsController extends Controller
                     // Lets save user attachment to database
                     $userAttachment = new UserAttachments();
                     $userAttachment->attachment_id = $attachment->attachment_id;
-                    $userAttachment->user_id = $user->id;
+                    $userAttachment->user_id = $user['user']->id;
                     $userAttachment->save();
                     // let's now return blob data of attachment.
                     $blob = base64_encode(Storage::get($filePath));
@@ -79,7 +75,5 @@ class AttachmentsController extends Controller
             ], 400);
         }
     }
-    private function findMember(int $userId) :User|null{
-        return User::query()->with(['Group'])->find($userId) ?? null;
-    }
+
 }
