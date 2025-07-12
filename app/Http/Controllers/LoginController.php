@@ -51,7 +51,6 @@ class LoginController extends Controller
      * Generate secret key for JWT Token
      * @return string
      */
-    #[NoDiscard("Because this function generates key, you must consume this method")]
     private function generateSecretKey() :string {
         $strings = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         $key = '';
