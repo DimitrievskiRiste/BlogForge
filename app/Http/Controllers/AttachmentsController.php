@@ -41,11 +41,18 @@ class AttachmentsController extends Controller
                     $attachment->size = $size;
                     $attachment->mime_type = $mimeType;
                     $attachment->save();
+                    // Let's save attachment model to cache
+                    $repo = $this->loadRepo("Attachments");
+                    $ttl = time()+3600 * 24 * 30;
+                    $repo->addOrUpdate($attachment, $ttl);
                     // Lets save user attachment to database
                     $userAttachment = new UserAttachments();
                     $userAttachment->attachment_id = $attachment->attachment_id;
                     $userAttachment->user_id = $user['user']->id;
                     $userAttachment->save();
+                    //Lets save user attachment in cache
+                    $repo = $this->loadRepo("UserAttachments");
+                    $repo->addOrUpdate($userAttachment, $ttl);
                     // let's now return blob data of attachment.
                     $blob = base64_encode(Storage::get($filePath));
                     return response()->json([
