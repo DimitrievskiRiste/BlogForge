@@ -26,6 +26,8 @@ Route::middleware(\App\Http\Middleware\ApiMiddleware::class)->prefix("api")->wit
        Route::controller(\App\Http\Controllers\CategoriesController::class)->group(function(){
            Route::get("/categories", "actionList");
            Route::post("/category/add", "actionAdd");
+           Route::get('/category_info/{slug}','actionGet');
+           Route::post("/edit_category", 'actionEdit');
        });
    });
 
