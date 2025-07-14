@@ -15,3 +15,4 @@ Schedule::command("cache:sync-user-groups")->daily()->withoutOverlapping();
 Schedule::command("cache:sync-attachments")->daily()->withoutOverlapping();
 Schedule::command("cache:sync-categories")->daily()->withoutOverlapping();
 Schedule::command("cache:sync-user-attachments")->daily()->withoutOverlapping();
+Schedule::command("cache:sync-articles")->daily()->withoutOverlapping();
