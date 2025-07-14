@@ -35,6 +35,13 @@ abstract class Controller
     private function findMember(int $userId) :User|null{
         return User::query()->with(['Group'])->find($userId) ?? null;
     }
+    protected function extractUserData(array $tokenData) :User|null
+    {
+        if(array_key_exists("user", $tokenData)){
+            return $tokenData['user'];
+        }
+        return null;
+    }
 
     /**
      * Load repository cached eloquent model(s)
