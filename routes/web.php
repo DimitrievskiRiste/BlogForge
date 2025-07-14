@@ -22,6 +22,11 @@ Route::middleware(\App\Http\Middleware\ApiMiddleware::class)->prefix("api")->wit
        Route::controller(\App\Http\Controllers\AttachmentsController::class)->group(function(){
            Route::post("/attachments/upload", 'upload');
        });
+       // Route for Categories. Currently implemented list categories and adding new category
+       Route::controller(\App\Http\Controllers\CategoriesController::class)->group(function(){
+           Route::get("/categories", "actionList");
+           Route::post("/category/add", "actionAdd");
+       });
    });
 
 });
