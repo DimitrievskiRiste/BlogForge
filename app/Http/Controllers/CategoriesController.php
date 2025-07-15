@@ -23,9 +23,6 @@ class CategoriesController extends Controller
     }
     public function actionAdd(Request $request) :JsonResponse
     {
-        $tokenData = $this->getAuthenticatedAPIUser($request);
-        $user = $this->extractUserData($tokenData);
-        if($user->Group->can_add_categories && $user->Group->can_access_admincp) {
             try {
                 $data = $request->validate([
                     "category_name" => "regex:/^[a-zA-Z\s0-9,.!]+$/|required",
@@ -53,9 +50,7 @@ class CategoriesController extends Controller
                 $errors = $e->errors();
                 return response()->json(['hasError' => true, 'errors' => $errors], 400);
             }
-        } else {
-            return response()->json(['hasError' => true, 'message' => "Your account doesn't have required permission!"], 403);
-        }
+
     }
     public function actionGet(Request $request, string $slug) :JsonResponse
     {
@@ -68,9 +63,6 @@ class CategoriesController extends Controller
     }
     public function actionEdit(Request $request) :JsonResponse
     {
-        $tokenData = $this->getAuthenticatedAPIUser($request);
-        $user = $this->extractUserData($tokenData);
-        if($user->Group->can_access_admincp && $user->Group->can_edit_categories) {
             try {
                 $data = $request->validate([
                     "category_id" => "required|numeric",
@@ -95,9 +87,6 @@ class CategoriesController extends Controller
                 $errors = $e->errors();
                 return response()->json(['hasError' => true, 'errors' => $errors], 400);
             }
-        } else {
-            return response()->json(['hasError' => true, 'message' => "Your account doesn't have required permission for this action!"],403);
-        }
     }
 
 }
