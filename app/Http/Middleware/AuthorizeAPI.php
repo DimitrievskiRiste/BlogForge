@@ -33,10 +33,12 @@ class AuthorizeAPI
                 // let's check if jwt token is valid
                 try {
                     (array) $token = JWT::decode($jwtToken, new Key($secretKey, "HS256"));
-
                     if(array_key_exists('user', $token)) {
                         $member = $this->findUser($token['user']);
+                        dd($member);
                         if(password_verify($tokenPass, $member->token_password)){
+                            $request->attributes->set("userId", $member->id);
+                            $request->attributes->set('isValidated', true);
                             return $next($request);
                         }
                         return response()->json(['errors' => [
@@ -69,10 +71,9 @@ class AuthorizeAPI
                     ]], 403);
                 }
             }
+            return response("Access denied", 403);
         }
-        return response()->json(['errors' => [
-            'missing_token_or_key' => 'Missing JWT Token or secret key!'
-        ]], 403);
+        return response("Access denied", 403);
     }
 
     /**
