@@ -19,9 +19,12 @@ Route::middleware(\App\Http\Middleware\ApiMiddleware::class)->prefix("api")->wit
    // Authorized API Routes. Required JWT Token for access
    Route::middleware("auth.api")->group(function() {
        // AttachmentsController routes
-       Route::controller(\App\Http\Controllers\AttachmentsController::class)->group(function(){
-           Route::post("/attachments/upload", 'upload');
+       Route::middleware("scope.attachments")->group(function(){
+           Route::controller(\App\Http\Controllers\AttachmentsController::class)->group(function(){
+               Route::post("/attachments/upload", 'upload');
+           });
        });
+
        // Route for Categories. Currently implemented list categories and adding new category
        Route::controller(\App\Http\Controllers\CategoriesController::class)->group(function(){
            Route::get("/categories", "actionList");
