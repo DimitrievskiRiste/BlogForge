@@ -9,7 +9,7 @@ Route::get('/', function () {
 /**
  * API Routes
  */
-Route::middleware(\App\Http\Middleware\ApiMiddleware::class)->prefix("api")->group(function(){
+Route::middleware(['api'])->prefix("api")->withoutMiddleware(['web'])->group(function(){
     /**
      * Route for handling login with JWT token
      */
