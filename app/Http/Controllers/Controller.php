@@ -52,7 +52,7 @@ abstract class Controller
     protected function loadRepo($repoName) :AbstractRepository|\Exception
     {
         try {
-            $loadedClass = "\\App\\Repository\\$repoName"."Repository";
+            $loadedClass = "\\App\\Repositories\\$repoName"."Repository";
             $class = new \ReflectionClass($loadedClass);
             if($class->isSubclassOf("\\Riste\\AbstractRepository")){
                 return $class->newInstance();
