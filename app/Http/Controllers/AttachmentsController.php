@@ -16,14 +16,8 @@ class AttachmentsController extends Controller
     public function upload(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
-            $user = $this->getAuthenticatedAPIUser($request);
-            if(array_key_exists('user', $user)) {
-                if(!$user['user']->Group->can_upload_attachments){
-                    return response()->json([
-                        'error' => true,
-                        'message' => 'Missing permission can_upload_attachments, action aborted!'
-                    ], 403);
-                }
+            $token = $this->getAuthenticatedAPIUser($request);
+            $user = $this->extractUserData($token);
                 $request->validate([
                     'file' => 'required|mimes:zip,png,bmp,jpg,jpeg'
                 ]);
@@ -48,7 +42,7 @@ class AttachmentsController extends Controller
                     // Lets save user attachment to database
                     $userAttachment = new UserAttachments();
                     $userAttachment->attachment_id = $attachment->attachment_id;
-                    $userAttachment->user_id = $user['user']->id;
+                    $userAttachment->user_id = $user->id;
                     $userAttachment->save();
                     //Lets save user attachment in cache
                     $repo = $this->loadRepo("UserAttachments");
@@ -69,12 +63,7 @@ class AttachmentsController extends Controller
                         'message' => 'Attachment type not supported'
                     ], 403);
                 }
-            } else {
-                return response()->json([
-                    'error' => true,
-                    'message' => 'Not authorized'
-                ], 403);
-            }
+
         } catch(ValidationException $validationException) {
             return response()->json([
                 'error' => true,
