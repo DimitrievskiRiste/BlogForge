@@ -2,7 +2,7 @@
 namespace App\Repositories;
 use Riste\AbstractRepository;
 
-class UsersRepository extends AbstractRepository
+class UserRepository extends AbstractRepository
 {
     private $cacheKey = "users";
     public function getKey(): string
