@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->append(ApiMiddleware::class);
         $middleware->alias([
             'auth.api' => \App\Http\Middleware\AuthorizeAPI::class, // Add alias
+            'scope.attachments' => \App\Http\Middleware\AttachmentMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
