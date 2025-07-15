@@ -20,10 +20,10 @@ class EditCategoryMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         try{
-            list(1 => $token) = $request->header("Authorization");
-            $secret = $request->header("Authorization-Pass");
-            $jwt = JWT::decode($token, new Key($secret, "HS256"));
-            $user = $this->findUser($jwt['user']);
+            if(is_null($request->attributes->get("userId")) || is_null($request->attributes->get("isValidated"))){
+                return response()->json(['hasError' => true, 'message' => 'Not authorized'], 403);
+            }
+            $user = $this->findUser($request->attributes->get("userId"));
             if(!is_null($user) && $user->Group->can_access_admincp && $user->Group->can_edit_categories){
                 return $next($request);
             } else {
