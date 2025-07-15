@@ -9,7 +9,7 @@ Route::get('/', function () {
 /**
  * API Routes
  */
-Route::middleware(\App\Http\Middleware\ApiMiddleware::class)->prefix("api")->withoutMiddleware([\App\Http\Middleware\AuthorizeAPI::class])->group(function(){
+Route::middleware(\App\Http\Middleware\ApiMiddleware::class)->prefix("api")->group(function(){
     /**
      * Route for handling login with JWT token
      */
@@ -17,28 +17,21 @@ Route::middleware(\App\Http\Middleware\ApiMiddleware::class)->prefix("api")->wit
        Route::post("/login", 'login');
    });
    // Authorized API Routes. Required JWT Token for access
-   Route::middleware("auth.api")->group(function() {
-       // AttachmentsController routes
-       Route::middleware(['auth.api','scope.attachments'])->group(function(){
-           Route::controller(\App\Http\Controllers\AttachmentsController::class)->group(function(){
-               Route::get("/attachments", 'get');
-               Route::post("/attachments/upload", 'upload');
-           });
-       });
+    Route::middleware(['auth.api','scope.attachments'])->group(function(){
+        Route::controller(\App\Http\Controllers\AttachmentsController::class)->group(function(){
+            Route::post("/attachments/upload", 'upload');
+        });
+    });
 
-       // Route for Categories. Currently implemented list categories and adding new category
-       Route::controller(\App\Http\Controllers\CategoriesController::class)->group(function(){
-           Route::get("/categories", "actionList");
-           // scope add_category
-           Route::middleware(['auth.api','scope.add_category'])->group(function(){
-               Route::post("/category/add", "actionAdd");
-           });
-           Route::get('/category_info/{slug}','actionGet');
-           // Scope edit_category
-           Route::middleware("scope.edit_category")->group(function(){
-               Route::post("/edit_category", 'actionEdit');
-           });
-       });
-   });
+    // Route for Categories. Currently implemented list categories and adding new category
+    Route::controller(\App\Http\Controllers\CategoriesController::class)->group(function(){
+        Route::get("/categories", "actionList");
+        // scope add_category
+        Route::post("/category/add", "actionAdd")->middleware(['auth.api','scope.add_category']);
+
+        Route::get('/category_info/{slug}','actionGet');
+        // Scope edit_category
+        Route::post("/edit_category", 'actionEdit')->middleware(['auth.api','scope.edit_category']);
+    });
 
 });
