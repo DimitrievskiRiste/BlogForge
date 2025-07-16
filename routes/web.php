@@ -3,6 +3,7 @@
 use App\Http\Controllers\AttachmentsController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\UserGroupsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -26,7 +27,7 @@ Route::middleware(['api'])->prefix("api")->withoutMiddleware(['web'])->group(fun
         });
     });
 
-    // Route for Categories. Currently implemented list categories and adding new category
+    // Routes for Categories. Currently implemented list categories and adding new category
     Route::controller(CategoriesController::class)->group(function(){
         Route::get("/categories", "list");
         // scope add_category
@@ -38,5 +39,11 @@ Route::middleware(['api'])->prefix("api")->withoutMiddleware(['web'])->group(fun
         // Scope remove_category
         Route::post('/remove_category', 'delete')->middleware(['auth.api', 'scope.remove_category']);
     });
-
+    // Routes for user groups
+    Route::controller(UserGroupsController::class)->group(function(){
+        Route::get('/groups/get', 'list')->middleware(['auth.api','scope.can_see_user_groups']);
+        Route::post('/groups/add', 'add')->middleware(['auth.api','scope.can_add_user_groups']);
+        Route::post('/groups/edit', 'edit')->middleware(['auth.api','scope.can_edit_user_groups']);
+        Route::post('/groups/remove', 'delete')->middleware(['auth.api','scope.can_remove_user_groups']);
+    });
 });
