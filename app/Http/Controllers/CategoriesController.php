@@ -6,12 +6,13 @@ use App\Models\Categories;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Riste\AbstractRepository;
 
 class CategoriesController extends Controller
 {
-    public function actionList(Request $request) :JsonResponse {
+    public function list(Request $request) :JsonResponse {
         $categoriesRepo = $this->categoryRepo();
         (int) $offset = $request->get("offset", 0);
         (int) $limit = $request->get("limit",20);
@@ -21,7 +22,7 @@ class CategoriesController extends Controller
     private function categoryRepo() :\Exception|AbstractRepository{
         return $this->loadRepo("Categories");
     }
-    public function actionAdd(Request $request) :JsonResponse
+    public function add(Request $request) :JsonResponse
     {
             try {
                 $data = $request->validate([
@@ -52,7 +53,7 @@ class CategoriesController extends Controller
             }
 
     }
-    public function actionGet(Request $request, string $slug) :JsonResponse
+    public function get(Request $request, string $slug) :JsonResponse
     {
         $category = $this->categoryRepo()->findWhere('category_slug',$slug);
         if(!is_null($category)) {
@@ -61,7 +62,7 @@ class CategoriesController extends Controller
             return response()->json(['hasError' => true, 'message' => 'Category not found!'], 404);
         }
     }
-    public function actionEdit(Request $request) :JsonResponse
+    public function edit(Request $request) :JsonResponse
     {
             try {
                 $data = $request->validate([
@@ -88,5 +89,23 @@ class CategoriesController extends Controller
                 return response()->json(['hasError' => true, 'errors' => $errors], 400);
             }
     }
-
+    public function delete(Request $request) :Response
+    {
+        try {
+            $data = $request->validate([
+                'category_id' => 'required|numeric'
+            ]);
+            $model = Categories::query()->where('category_id', '=', $data['category_id']);
+            if($model->exists()){
+                $model->delete();
+                // let's also delete it from cache!
+                $this->categoryRepo()->removeItem('category_id', $data['category_id']);
+                return response()->json(['success' => true, 'message' => 'category removed']);
+            }
+            return response()->json(['hasErrors' => true, 'message' => 'category not found'], 404);
+        } catch(\Exception $e) {
+            Log::error($e);
+            return response()->json(['hasErrors' => true, 'message' => 'Unable to remove category, see laravel logs!'], 500);
+        }
+    }
 }
