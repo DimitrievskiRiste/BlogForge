@@ -29,6 +29,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $can_upload_attachments
  * @property boolean $can_remove_self_attachments
  * @property boolean $can_remove_attachments
+ * @property boolean $can_add_groups
+ * @property boolean $can_edit_groups
+ * @property boolean $can_remove_groups
  */
 class UserGroups extends Model
 {
@@ -57,6 +60,9 @@ class UserGroups extends Model
         "can_manage_admins",
         "can_upload_attachments",
         "can_remove_self_attachments",
-        "can_remove_attachments"
+        "can_remove_attachments",
+        'can_add_groups',
+        'can_edit_groups',
+        'can_remove_groups'
     ];
 }
