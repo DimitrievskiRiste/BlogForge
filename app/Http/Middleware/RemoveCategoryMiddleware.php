@@ -22,7 +22,7 @@ class RemoveCategoryMiddleware
             return response()->json(['hasErrors' => true, 'message' => 'No access'], 403);
         }
         $member = $this->findMember($userId);
-        if(!is_null($member) && $member->Group->can_remove_categories){
+        if(!is_null($member) && $member->Group->can_remove_categories && $member->Group->can_access_admincp){
             return $next($request);
         }
         return response()->json(['hasErrors' => true, 'message' => 'No access'], 403);
