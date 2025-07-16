@@ -4,6 +4,7 @@ use App\Http\Middleware\AttachmentMiddleware;
 use App\Http\Middleware\AuthorizeAPI;
 use App\Http\Middleware\CategoryMiddleware;
 use App\Http\Middleware\EditCategoryMiddleware;
+use App\Http\Middleware\RemoveCategoryMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -22,6 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'scope.attachments' => AttachmentMiddleware::class,
             'scope.add_category' => CategoryMiddleware::class,
             'scope.edit_category' => EditCategoryMiddleware::class,
+            'scope.remove_category' => RemoveCategoryMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
