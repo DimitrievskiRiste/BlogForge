@@ -2,6 +2,10 @@
 
 use App\Http\Middleware\AttachmentMiddleware;
 use App\Http\Middleware\AuthorizeAPI;
+use App\Http\Middleware\CanAddUserGroupsMiddleware;
+use App\Http\Middleware\CanEditUserGroupsMiddleware;
+use App\Http\Middleware\CanRemoveUserGroupsMiddleware;
+use App\Http\Middleware\CanSeeUserGroupsMiddleware;
 use App\Http\Middleware\CategoryMiddleware;
 use App\Http\Middleware\EditCategoryMiddleware;
 use App\Http\Middleware\RemoveCategoryMiddleware;
@@ -24,6 +28,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'scope.add_category' => CategoryMiddleware::class,
             'scope.edit_category' => EditCategoryMiddleware::class,
             'scope.remove_category' => RemoveCategoryMiddleware::class,
+            'scope.can_see_user_groups' => CanSeeUserGroupsMiddleware::class,
+            'scope.can_add_user_groups' => CanAddUserGroupsMiddleware::class,
+            'scope.can_edit_user_groups' => CanEditUserGroupsMiddleware::class,
+            'scope.can_remove_user_groups' => CanRemoveUserGroupsMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
