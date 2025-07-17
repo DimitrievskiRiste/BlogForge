@@ -11,11 +11,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $registration_enabled
  * @property boolean $registration_min_age
  * @property boolean $verify_email_address
+ * @property boolean $tos_text
+ * @property boolean $privacy_text
  */
 class WebsiteSettings extends Model
 {
     protected $table = 'website_settings';
     protected $primaryKey = 'id';
-    protected $fillable = ['website_name', 'website_logo', 'registration_enabled','registration_min_age','verify_email_address'];
+    protected $fillable = ['website_name', 'website_logo', 'registration_enabled','registration_min_age','verify_email_address', 'tos_text', 'privacy_text'];
 
 }
