@@ -4,6 +4,7 @@ use App\Http\Controllers\AttachmentsController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserGroupsController;
+use App\Http\Controllers\WebsiteSettingsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -45,5 +46,10 @@ Route::middleware(['api'])->prefix("api")->withoutMiddleware(['web'])->group(fun
         Route::post('/groups/add', 'add')->middleware(['auth.api','scope.can_add_user_groups']);
         Route::post('/groups/edit', 'edit')->middleware(['auth.api','scope.can_edit_user_groups']);
         Route::post('/groups/remove', 'delete')->middleware(['auth.api','scope.can_remove_user_groups']);
+    });
+    // Route for website settings
+    Route::controller(WebsiteSettingsController::class)->group(function(){
+       Route::get('/settings','list')->middleware(['auth.api','scope.can_change_settings']);
+       Route::post('/settings/save','save')->middleware(['auth.api','scope.can_change_settings']);
     });
 });
