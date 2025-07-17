@@ -52,6 +52,7 @@ class AttachmentsController extends Controller
                     return response()->json([
                         'success' => true,
                         'attachment' => [
+                            'attachment_id' => $attachment->attachment_id,
                             'name' => $attachment->attachment_name,
                             'blob' => $blob,
                             'mime' => $mimeType
