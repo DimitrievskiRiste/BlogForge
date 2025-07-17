@@ -23,6 +23,8 @@ return new class extends Migration
                 ->references('attachment_id')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
+            $table->longText('tos_text');
+            $table->longText('privacy_text');
             $table->timestamps();
         });
     }
