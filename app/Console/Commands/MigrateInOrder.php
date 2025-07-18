@@ -36,7 +36,8 @@ class MigrateInOrder extends Command
                 "2025_07_07_173136_create_website_settings_table.php",
                 "2025_07_08_180343_create_user_attachments_table.php",
                 "2025_07_09_170839_create_categories_table.php",
-                "2025_07_14_230012_create_articles_table.php"
+                "2025_07_14_230012_create_articles_table.php",
+                "2025_07_18_174953_create_content_translations_table.php"
             ];
             $path = "database/migrations";
             $this->info("--- Creating default migrations, using $path as default migrations path");
