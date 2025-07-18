@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArticlesController;
 use App\Http\Controllers\AttachmentsController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\LoginController;
@@ -51,5 +52,10 @@ Route::middleware(['api'])->prefix("api")->withoutMiddleware(['web'])->group(fun
     Route::controller(WebsiteSettingsController::class)->group(function(){
        Route::get('/settings','list')->middleware(['auth.api','scope.can_change_settings']);
        Route::post('/settings/save','save')->middleware(['auth.api','scope.can_change_settings']);
+    });
+    // Routes for articles
+    Route::controller(ArticlesController::class)->group(function(){
+        Route::get('/articles','list');
+        Route::post('/article/add', 'add')->middleware(['auth.api','scope.can_add_articles']);
     });
 });
