@@ -26,7 +26,8 @@ $models = [
     "UserAttachments",
     "UserGroups",
     "UserLogs",
-    "WebsiteSettings"
+    "WebsiteSettings",
+    "ContentTranslations"
 ];
 foreach($models as $model){
     Schedule::command("cache:sync-models $model")->daily()->withoutOverlapping();
