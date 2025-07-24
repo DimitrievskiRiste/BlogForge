@@ -57,5 +57,7 @@ Route::middleware(['api'])->prefix("api")->withoutMiddleware(['web'])->group(fun
     Route::controller(ArticlesController::class)->group(function(){
         Route::get('/articles','list');
         Route::post('/article/add', 'add')->middleware(['auth.api','scope.can_add_articles']);
+        Route::post('/article/edit', 'edit')->middleware(['auth.api','scope.can_edit_articles']);
+        Route::post('/article/delete', 'delete')->middleware(['auth.api','scope.can_remove_articles']);
     });
 });
