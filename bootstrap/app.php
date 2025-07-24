@@ -4,8 +4,10 @@ use App\Http\Middleware\AttachmentMiddleware;
 use App\Http\Middleware\AuthorizeAPI;
 use App\Http\Middleware\CanAddArticlesMiddleware;
 use App\Http\Middleware\CanAddUserGroupsMiddleware;
+use App\Http\Middleware\CanEditArticlesMiddleware;
 use App\Http\Middleware\CanEditUserGroupsMiddleware;
 use App\Http\Middleware\CanManageSettingsMiddleware;
+use App\Http\Middleware\CanRemoveArticlesMiddleware;
 use App\Http\Middleware\CanRemoveUserGroupsMiddleware;
 use App\Http\Middleware\CanSeeUserGroupsMiddleware;
 use App\Http\Middleware\CategoryMiddleware;
@@ -36,6 +38,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'scope.can_remove_user_groups' => CanRemoveUserGroupsMiddleware::class,
             'scope.can_change_settings' => CanManageSettingsMiddleware::class,
             'scope.can_add_articles' => CanAddArticlesMiddleware::class,
+            'scope.can_edit_articles' => CanEditArticlesMiddleware::class,
+            'scope.can_remove_articles' => CanRemoveArticlesMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
