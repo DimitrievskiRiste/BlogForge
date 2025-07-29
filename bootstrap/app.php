@@ -6,6 +6,7 @@ use App\Http\Middleware\AuthorizeAPI;
 use App\Http\Middleware\CanAddArticlesMiddleware;
 use App\Http\Middleware\CanAddUserGroupsMiddleware;
 use App\Http\Middleware\CanEditArticlesMiddleware;
+use App\Http\Middleware\CanEditCommentMiddleware;
 use App\Http\Middleware\CanEditUserGroupsMiddleware;
 use App\Http\Middleware\CanManageSettingsMiddleware;
 use App\Http\Middleware\CanRemoveArticlesMiddleware;
@@ -42,6 +43,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'scope.can_edit_articles' => CanEditArticlesMiddleware::class,
             'scope.can_remove_articles' => CanRemoveArticlesMiddleware::class,
             'scope.can_comment_on_article' => ArticleCommentMiddleware::class,
+            'scope.can_edit_comment' => CanEditCommentMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
