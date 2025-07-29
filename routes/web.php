@@ -3,6 +3,7 @@
 use App\Http\Controllers\ArticlesController;
 use App\Http\Controllers\AttachmentsController;
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserGroupsController;
 use App\Http\Controllers\WebsiteSettingsController;
@@ -59,5 +60,9 @@ Route::middleware(['api'])->prefix("api")->withoutMiddleware(['web'])->group(fun
         Route::post('/article/add', 'add')->middleware(['auth.api','scope.can_add_articles']);
         Route::post('/article/edit', 'edit')->middleware(['auth.api','scope.can_edit_articles']);
         Route::post('/article/delete', 'delete')->middleware(['auth.api','scope.can_remove_articles']);
+    });
+    // Routes for comments
+    Route::controller(CommentsController::class)->group(function(){
+        Route::post('/comment','add')->middleware(['auth.api','scope.can_comment_on_article']);
     });
 });
