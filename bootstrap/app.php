@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\ArticleCommentMiddleware;
 use App\Http\Middleware\AttachmentMiddleware;
 use App\Http\Middleware\AuthorizeAPI;
 use App\Http\Middleware\CanAddArticlesMiddleware;
@@ -40,6 +41,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'scope.can_add_articles' => CanAddArticlesMiddleware::class,
             'scope.can_edit_articles' => CanEditArticlesMiddleware::class,
             'scope.can_remove_articles' => CanRemoveArticlesMiddleware::class,
+            'scope.can_comment_on_article' => ArticleCommentMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
