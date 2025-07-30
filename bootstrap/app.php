@@ -13,7 +13,9 @@ use App\Http\Middleware\CanRemoveArticlesMiddleware;
 use App\Http\Middleware\CanRemoveUserGroupsMiddleware;
 use App\Http\Middleware\CanSeeUserGroupsMiddleware;
 use App\Http\Middleware\CategoryMiddleware;
+use App\Http\Middleware\DeleteCommentMiddleware;
 use App\Http\Middleware\EditCategoryMiddleware;
+use App\Http\Middleware\GetCommentsMiddleware;
 use App\Http\Middleware\RemoveCategoryMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -44,6 +46,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'scope.can_remove_articles' => CanRemoveArticlesMiddleware::class,
             'scope.can_comment_on_article' => ArticleCommentMiddleware::class,
             'scope.can_edit_comment' => CanEditCommentMiddleware::class,
+            'scope.get_comments' => GetCommentsMiddleware::class,
+            'scope.can_delete_comment' => DeleteCommentMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
