@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\BlogForge;
 use App\Models\User;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -62,5 +63,13 @@ abstract class Controller
             Log::error($e);
             throw $e;
         }
+    }
+
+    /**
+     * Create new instance of BF
+     * @return BlogForge
+     */
+    protected function app() :BlogForge {
+        return new BlogForge();
     }
 }
