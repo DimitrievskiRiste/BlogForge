@@ -65,5 +65,7 @@ Route::middleware(['api'])->prefix("api")->withoutMiddleware(['web'])->group(fun
     Route::controller(CommentsController::class)->group(function(){
         Route::post('/comment','add')->middleware(['auth.api','scope.can_comment_on_article']);
         Route::post('/edit_comment', 'edit')->middleware(['auth.api', 'scope.can_edit_comment']);
+        Route::get('/comments', 'get')->middleware(['scope.get_comments']);
+        Route::post('/delete_comment', 'delete')->middleware(['auth.api','scope.can_delete_comment']);
     });
 });
