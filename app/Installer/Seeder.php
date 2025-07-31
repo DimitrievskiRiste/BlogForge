@@ -48,7 +48,7 @@ class Seeder
             $group->can_manage_admins = true;
             $group->save();
             // Now let's add it in cache as well
-            $this->groupRepo()->addOrUpdate($group);
+            self::groupRepo()->addOrUpdate($group);
         } catch (\Exception $e) {
             Log::error($e);
         }
@@ -74,7 +74,7 @@ class Seeder
             $group->can_comment = true;
             $group->can_access_admincp = false;
             $group->save();
-            $this->groupRepo()->addOrUpdate($group);
+            self::groupRepo()->addOrUpdate($group);
         } catch (\Exception $e) {
             Log::error($e);
         }
