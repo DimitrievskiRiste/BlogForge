@@ -64,10 +64,10 @@ class Installer
      * Instance of installer's db class
      * @return Database
      */
-    public function db() :Database {
+    public static function db() :Database {
         return new Database();
     }
-    public function env():DBEnvironment{
+    public static function env():DBEnvironment{
         return new DBEnvironment();
     }
 }
