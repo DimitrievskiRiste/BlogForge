@@ -48,12 +48,12 @@ class MakeRepositoryCommand extends Command
                namespace App\Repositories;
                use Riste\AbstractRepository;
                class $repo extends AbstractRepository {
-                 private string \$cacheKey = "$cacheKey";
+                 private static string \$cacheKey = "$cacheKey";
                  public function getKey():string {
-                   return \$this->cacheKey;
+                   return self::\$cacheKey;
                  }
                  public function setKey(string \$key):void {
-                   \$this->cacheKey = \$key;
+                   self::\$cacheKey = \$key;
                  }
                }
               EOD;
