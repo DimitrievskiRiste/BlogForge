@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 
 class Database
 {
-    protected static array $defaultTables = [
+    private static array $defaultTables = [
         "users",
         "cache",
         "jobs",
@@ -54,5 +54,12 @@ class Database
     public function createDBTables() :void
     {
         Artisan::call("blogforge:migrate");
+    }
+    public function getDefaultTables():array
+    {
+        return self::$defaultTables;
+    }
+    public static function seeder():Seeder {
+        return new Seeder();
     }
 }
