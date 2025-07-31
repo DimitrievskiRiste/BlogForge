@@ -4,13 +4,13 @@ use Riste\AbstractRepository;
 
 class ArticlesRepository extends  AbstractRepository
 {
-    private $cacheKey = "articles";
+    private static $cacheKey = "articles";
     public function getKey(): string
     {
-        return $this->cacheKey;
+        return self::$cacheKey;
     }
     public function setKey(string $key): void
     {
-        $this->cacheKey = $key;
+        self::$cacheKey = $key;
     }
 }

@@ -4,13 +4,13 @@ use Riste\AbstractRepository;
 
 class ContentTranslationsRepository extends AbstractRepository
 {
-    private $cacheKey = "content_translations";
+    private static string $cacheKey = "content_translations";
     public function getKey(): string
     {
-        return $this->cacheKey;
+        return self::$cacheKey;
     }
     public function setKey(string $key): void
     {
-        $this->cacheKey = $key;
+        self::$cacheKey = $key;
     }
 }

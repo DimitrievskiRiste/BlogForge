@@ -4,13 +4,13 @@ use Riste\AbstractRepository;
 
 class AttachmentsRepository extends AbstractRepository
 {
-    protected $cacheKey = "attachments";
+    protected static $cacheKey = "attachments";
     public function getKey(): string
     {
-        return $this->cacheKey;
+        return self::$cacheKey;
     }
     public function setKey(string $key) :void
     {
-        $this->cacheKey = $key;
+        self::$cacheKey = $key;
     }
 }
