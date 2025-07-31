@@ -32,6 +32,7 @@ class DBEnvironment
      * @param string $user
      * @param string $password
      * @param int $dbport
+     * @param string $dbname
      * @return void
      */
     public function setDbData(string $host, string $user, string $password, int $dbport, string $dbname) :void {
@@ -74,10 +75,73 @@ class DBEnvironment
             Log::error($e);
         }
     }
-    private function replaceLine(&$line, $key, $value, &$keysFound) :void {
-        if(strpos(trim($line), "$key=") === 0){
+    private function replaceLine(&$line, $key, $value, &$keysFound) :void
+    {
+        if (strpos(trim($line), "$key=") === 0) {
             $keysFound[$key] = true;
             $line = "$key=$value";
         }
+    }
+
+    /**
+     * Read specific .env key value. This function returns string if specific key is found or null if key not found.
+     * @param string $key
+     * @return string|null
+     */
+    private function getEnvKey(string $key) :string|null
+    {
+        try {
+            $lines = file(self::$filePath, FILE_IGNORE_NEW_LINES);
+            foreach ($lines as $line) {
+                if (strpos(trim($line), "$key=") === 0) {
+                    return str_replace('"', '', $line);
+                }
+            }
+            return null;
+        } catch (\Exception $e) {
+            Log::error($e);
+            return null;
+        }
+    }
+
+    /**
+     * Check if DB_HOST .env variable is empty
+     * @return bool
+     */
+    public function isDBHostEmpty():bool {
+        return self::isDbInfoEmpty('DB_HOST');
+    }
+
+    /**
+     * Check if DB_USERNAME .env variable is empty
+     * @return bool
+     */
+    public function isDBUsernameEmpty():bool{
+        return self::isDbInfoEmpty('DB_USERNAME');
+    }
+
+    /**
+     * Check if DB_DATABASE .env variable is empty.
+     * @return bool
+     */
+    public function isDBNameEmpty():bool{
+        return self::isDbInfoEmpty('DB_DATABASE');
+    }
+
+    /**
+     * Check if DB_PORT .env variable is empty
+     * @return bool
+     */
+    public function isDBPortEmpty():bool{
+        return self::isDbInfoEmpty('DB_PORT');
+    }
+    /**
+     * Checks if some database information .env variable is empty.
+     * @param string $key
+     * @return bool
+     */
+    private function isDbInfoEmpty(string $key = 'DB_HOST'):bool {
+        $dbInfo = self::getEnvKey($key);
+        return !(!is_null($dbInfo) && ($value = explode('=', $dbInfo)) && array_key_exists(1, $value) && !empty($value[1]));
     }
 }
