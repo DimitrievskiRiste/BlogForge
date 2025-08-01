@@ -4,6 +4,7 @@ use App\Http\Controllers\ArticlesController;
 use App\Http\Controllers\AttachmentsController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\CommentsController;
+use App\Http\Controllers\InstallerController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserGroupsController;
 use App\Http\Controllers\WebsiteSettingsController;
@@ -68,4 +69,18 @@ Route::middleware(['api'])->prefix("api")->withoutMiddleware(['web'])->group(fun
         Route::get('/comments', 'get')->middleware(['scope.get_comments']);
         Route::post('/delete_comment', 'delete')->middleware(['auth.api','scope.can_delete_comment']);
     });
+    // routes for installer
+    Route::prefix('/install')->controller(InstallerController::class)->group(function(){
+        Route::get('/connection','checkConnection');
+        Route::get('/environment/check','envSettings');
+        Route::post('/environment/update','writeEnvSettings');
+        Route::get('/db/tables/check', 'checkDatabase');
+        Route::get('/db/tables/drop','dropTables');
+        Route::post('/db/tables/create','createTables');
+        Route::post('/db/groups/create', 'createDefaultGroups');
+        Route::post('/db/user/add','createAdminAccount');
+        Route::post('/db/settings/add','createWebsiteSetting');
+        Route::post('/lock','createLock');
+
+    })->middleware(['api.installer']);
 });
