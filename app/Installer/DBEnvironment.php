@@ -136,6 +136,13 @@ class DBEnvironment
         return self::isDbInfoEmpty('DB_PORT');
     }
     /**
+     * Check if DB_PASSWORD env variable is empty
+     * @return bool
+     */
+    public function isDBPassEmpty():bool{
+        return self::isDbInfoEmpty('DB_PASSWORD');
+    }
+    /**
      * Checks if some database information .env variable is empty.
      * @param string $key
      * @return bool
