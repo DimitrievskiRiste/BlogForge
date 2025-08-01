@@ -16,6 +16,7 @@ use App\Http\Middleware\CategoryMiddleware;
 use App\Http\Middleware\DeleteCommentMiddleware;
 use App\Http\Middleware\EditCategoryMiddleware;
 use App\Http\Middleware\GetCommentsMiddleware;
+use App\Http\Middleware\InstallerMiddleware;
 use App\Http\Middleware\RemoveCategoryMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -48,6 +49,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'scope.can_edit_comment' => CanEditCommentMiddleware::class,
             'scope.get_comments' => GetCommentsMiddleware::class,
             'scope.can_delete_comment' => DeleteCommentMiddleware::class,
+            'api.installer' => InstallerMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
