@@ -14,7 +14,7 @@ class Installer
      * Get installer app version
      * @return string
      */
-    public function getVersion(): string
+    public static function getVersion(): string
     {
         return self::$version;
     }
@@ -23,7 +23,7 @@ class Installer
      * Get app version id
      * @return int
      */
-    public function getVersionId(): int
+    public static function getVersionId(): int
     {
         return self::$versionId;
     }
@@ -33,7 +33,7 @@ class Installer
      * Check if application is already installed
      * @return bool
      */
-    public function isInstalled() :bool
+    public static function isInstalled() :bool
     {
         return (empty(self::getDatabaseTables()) ? true : false);
     }
@@ -42,7 +42,7 @@ class Installer
      * Check if installation is locked. For security reasons do not delete install.lock file unless you want to re-install your app.
      * @return bool
      */
-    public function isLocked():bool {
+    public static function isLocked():bool {
         return (file_exists(self::$path) && file_exists(self::$path."/".self::$fileName) ? true : false);
     }
 
@@ -50,7 +50,7 @@ class Installer
      * Lock installation
      * @return void
      */
-    public function lock():void {
+    public static function lock():void {
         if(!self::isLocked()) {
             $date = date("d/m/Y H:i:s");
             $fileContent = <<<EOD
