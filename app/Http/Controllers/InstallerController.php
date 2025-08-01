@@ -6,6 +6,7 @@ use App\Installer\Installer;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rules\In;
 
 class InstallerController extends Controller
 {
@@ -56,5 +57,57 @@ class InstallerController extends Controller
             return response()->json(['hasErrors' => true, 'message' => 'There is problem when trying to get connection with mysql. Check error logs'], 500);
         }
     }
-
+    public function checkDatabase(Request $request) :Response {
+        try {
+            if(Installer::db()->isDbEmpty()){
+                return response()->json(['success' => true, 'message' => 'Database is empty and ready to start migration process']);
+            }
+            return response()->json(['hasErrors' => true, 'has_tables' => true, 'tables' => Installer::db()->getDatabaseTables()]);
+        } catch (\Exception $e) {
+            Log::error($e);
+            return response()->json(['hasErrors' => true, 'message' => "There was an error while checking database for tables, please check error logs"], 500);
+        }
+    }
+    public function dropTables(Request $request) :Response {
+        try {
+            if(!Installer::db()->isDbEmpty()) {
+                Installer::db()->dropTables();
+                return response()->json(['success' => true, 'message' => 'successfully emptied the database!']);
+            }
+            return response()->json(['hasErrors' => true, 'message' => 'No tables to drop!']);
+        } catch (\Exception $e) {
+            Log::error($e);
+            return response()->json(['hasErrors' => true, 'message' => 'There were some errors when trying to drop database tables, please check error logs'], 500);
+        }
+    }
+    public function createTables(Request $request) :Response {
+        try {
+            if(Installer::db()->isDbEmpty()){
+                Installer::db()->createDBTables();
+                // Let's now re-check if there are some missing database tables
+                if(!empty(Installer::db()->hasMissingTables())){
+                    return response()->json(['success' => false, 'message' => 'Some tables were not successfully created', 'tables' => Installer::db()->hasMissingTables()]);
+                }
+                return response()->json(['success' => true, 'message' => 'Successfully created database tables!']);
+            }
+            return response()->json(['hasErrors' => true, 'message' => "Can't create database tables, the database is not empty!"]);
+        } catch(\Exception $e) {
+            Log::error($e);
+            return response()->json(['hasErrors' => true, 'message' => "There were some errors when trying to create database tables, please check error logs"], 500);
+        }
+    }
+    public function createDefaultGroups(Request $request) :Response {
+        try {
+            if(!Installer::db()->isDbEmpty() && empty(Installer::db()->hasMissingTables()) && !Installer::db()::seeder()->hasUserGroup()
+            && !Installer::db()::seeder()->hasAdminGroup()) {
+                Installer::db()::seeder()->createUserGroup();
+                Installer::db()::seeder()->createAdminGroup();
+                return response()->json(['success' => true, 'message' => 'Successfully created default user groups']);
+            }
+            return response()->json(['hasErrors' => true, 'message' => 'Default user groups already exists!']);
+        } catch (\Exception $e) {
+            Log::error($e);
+            return response()->json(['hasErrors' => true, 'message' => "There were some errors when trying to create default user groups, please check error logs"], 500);
+        }
+    }
 }
