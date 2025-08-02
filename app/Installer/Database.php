@@ -48,7 +48,7 @@ class Database
      */
     public function getConnection():bool{
         try {
-            Schema::getConnection();
+            self::getDatabaseTables();
             return true;
         } catch(\Exception $e) {
             Log::error($e);
