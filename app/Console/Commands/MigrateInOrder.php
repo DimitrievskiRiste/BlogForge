@@ -31,6 +31,7 @@ class MigrateInOrder extends Command
                 "2025_07_06_122143_create_user_groups_table.php",
                 "0001_01_01_000000_create_users_table.php",
                 "0001_01_01_000001_create_cache_table.php",
+                "0001_01_01_000002_create_jobs_table.php",
                 "2025_07_06_133038_create_attachments_table.php",
                 "2025_07_07_172558_create_user_logs_table.php",
                 "2025_07_07_173136_create_website_settings_table.php",

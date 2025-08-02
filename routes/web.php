@@ -70,6 +70,7 @@ Route::middleware(['api'])->prefix("api")->withoutMiddleware(['web'])->group(fun
         Route::post('/delete_comment', 'delete')->middleware(['auth.api','scope.can_delete_comment']);
     });
     // routes for installer
+    Route::get('/install/is_locked', [InstallerController::class,'isLocked']);
     Route::prefix('/install')->controller(InstallerController::class)->group(function(){
         Route::get('/connection','checkConnection');
         Route::get('/environment/check','envSettings');

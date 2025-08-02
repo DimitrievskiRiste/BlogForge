@@ -16,6 +16,6 @@ class InstallerMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return !Installer::isLocked() ? $next($request) : response()->json(['hasErrors' => true, 'message' => 'Installation is locked!'],400);
+        return !Installer::isLocked() ? $next($request) : response()->json(['hasErrors' => true, 'install_locked' => true, 'message' => 'Installation is locked!'],400);
     }
 }

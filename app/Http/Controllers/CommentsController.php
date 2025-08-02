@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class CommentsController extends Controller
 {
-    public function add(Request $request) :Response
+    public function add(Request $request) : \Illuminate\Http\JsonResponse
     {
         try {
             $data = $request->validate([
@@ -28,7 +28,7 @@ class CommentsController extends Controller
             return response()->json(['hasErrors' => true, 'message' => 'Cant add new comment. Please check error logs'], 500);
         }
     }
-    public function edit(Request $request) :Response
+    public function edit(Request $request) : \Illuminate\Http\JsonResponse
     {
         try {
             $data = $request->validate([
@@ -62,9 +62,9 @@ class CommentsController extends Controller
     /**
      * Get paginated comments for specific article. Required parameter in header articleId
      * @param Request $request
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function get(Request $request) :Response
+    public function get(Request $request) : \Illuminate\Http\JsonResponse
     {
         try {
             $offset = $request->get('offset', 0);
@@ -80,7 +80,8 @@ class CommentsController extends Controller
             return response()->json(['hasErrors' => true, 'message' => 'Something went wrong, please check error logs'], 500);
         }
     }
-    public function delete(Request $request) :Response {
+    public function delete(Request $request) : \Illuminate\Http\JsonResponse
+    {
         try {
             $commentId = $request->attributes->get('commentId');
             $isAdmin = $request->attributes->get('isAdmin');

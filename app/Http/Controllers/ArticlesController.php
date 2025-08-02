@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 
 class ArticlesController extends Controller
 {
-    public function list(Request $request) :Response
+    public function list(Request $request) : \Illuminate\Http\JsonResponse
     {
         try {
             $offset = $request->get("offset", 0);
@@ -32,7 +32,7 @@ class ArticlesController extends Controller
             return response()->json(['hasErrors' => true, 'message' => 'Something went wrong when getting articles data, check error logs'], 500);
         }
     }
-    public function add(Request $request) :Response
+    public function add(Request $request) : \Illuminate\Http\JsonResponse
     {
         try {
             $data = $request->validate([
@@ -76,7 +76,8 @@ class ArticlesController extends Controller
             return response()->json(['hasErrors' => true, 'message' => 'Something went wrong, please check error logs!'], 500);
         }
     }
-    public function edit(Request $request) :Response {
+    public function edit(Request $request) : \Illuminate\Http\JsonResponse
+    {
         try {
             $data = $request->validate([
                 'id' => 'required|integer',
@@ -138,7 +139,7 @@ class ArticlesController extends Controller
             return response()->json(['hasErrors' => true, 'message' => 'Failed to update article'], 400);
         }
     }
-    public function delete(Request $request) :Response
+    public function delete(Request $request) : \Illuminate\Http\JsonResponse
     {
         try {
             $data = $request->validate([

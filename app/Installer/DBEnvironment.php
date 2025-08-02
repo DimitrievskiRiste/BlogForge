@@ -53,6 +53,7 @@ class DBEnvironment
                     self::replaceLine($line,'DB_USERNAME',$user,$keysFound);
                     self::replaceLine($line, 'DB_PASSWORD', $password, $keysFound);
                     self::replaceLine($line,'DB_DATABASE',$dbname, $keysFound);
+					self::replaceLine($line,'DB_PORT',$dbport,$keysFound);
                 }
                 if(!$keysFound["DB_HOST"]) {
                     $lines[] = "DB_HOST=$host";
@@ -61,7 +62,7 @@ class DBEnvironment
                     $lines[] = "DB_USERNAME=$user";
                 }
                 if(!$keysFound['DB_PASSWORD']){
-                    $lines[] = "DB_PASSWORd=$password";
+                    $lines[] = "DB_PASSWORD=$password";
                 }
                 if(!$keysFound['DB_PORT']){
                     $lines[] = "DB_PORT=$dbport";

@@ -52,7 +52,7 @@ class Seeder
             $group->can_manage_admins = true;
             $group->save();
             // Now let's add it in cache as well
-            self::groupRepo()->addOrUpdate($group);
+            $this->groupRepo()->addOrUpdate($group);
         } catch (\Exception $e) {
             Log::error($e);
         }
@@ -60,9 +60,9 @@ class Seeder
 
     /**
      * Get Groups repository
-     * @return AbstractRepository
+     * @return UserGroupRepository
      */
-    protected function groupRepo() :AbstractRepository {
+    protected function groupRepo() :UserGroupsRepository {
         return new UserGroupsRepository();
     }
 
@@ -116,18 +116,18 @@ class Seeder
 
     /**
      * Users repository instance
-     * @return AbstractRepository
+     * @return UserRepository
      */
-    private function usersRepo():AbstractRepository
+    private function usersRepo():UserRepository
     {
         return new UserRepository();
     }
 
     /**
      * Website Settings Repository instance
-     * @return AbstractRepository
+     * @return WebsiteSettingsRepository
      */
-    private function settingsRepo():AbstractRepository {
+    private function settingsRepo():WebsiteSettingsRepository {
         return new WebsiteSettingsRepository();
     }
     public function hasWebsiteSetting():bool {

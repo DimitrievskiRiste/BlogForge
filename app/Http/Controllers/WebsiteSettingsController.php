@@ -11,7 +11,7 @@ use Riste\AbstractRepository;
 
 class WebsiteSettingsController extends Controller
 {
-    public function list(Request $request) :Response
+B    public function list(Request $request) : \Illuminate\Http\JsonResponse
     {
         $settings = $this->getRepo();
         $repoData = $settings->get();
@@ -25,7 +25,7 @@ class WebsiteSettingsController extends Controller
     private function getRepo() :AbstractRepository|\Exception {
         return $this->loadRepo('WebsiteSettings');
     }
-    public function save(Request $request) :Response
+    public function save(Request $request) : \Illuminate\Http\JsonResponse
     {
         try {
             $data = $request->validate([

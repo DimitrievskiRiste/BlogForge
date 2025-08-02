@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Installer\Installer;
+use App\Installer\Seeder;
 use App\Models\Attachments;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 class InstallerController extends Controller
 {
-    public function envSettings(Request $request): Response
+    public function envSettings(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
             return response()->json([
@@ -25,30 +27,26 @@ class InstallerController extends Controller
         }
     }
 
-    public function writeEnvSettings(Request $request): Response
+    public function writeEnvSettings(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
             $data = $request->validate([
                 'dbhost' => 'required',
                 'dbuser' => 'required',
                 'dbpass' => 'required',
-                'dbport' => 'required|integer',
+                'dbport' => 'required',
                 'dbname' => 'required'
             ]);
             Installer::env()->setDbData($data['dbhost'], $data['dbuser'], $data['dbpass'], $data['dbport'], $data['dbname']);
-            // Now let's check the connection
-            if (Installer::db()->getConnection()) {
-                // We have successfully connected to the database
-                return response()->json(['success' => true, 'message' => 'Successfully connected to the database.']);
-            }
-            return response()->json(['hasErrors' => true, 'message' => 'No connection could be made.']);
-        } catch (\Exception $e) {
+            return response()->json(['success' => true, 'message' => 'Successfully created DB details in .env']);
+        } 
+		catch (\Exception $e) {
             Log::error($e);
             return response()->json(['hasErrors' => true, 'message' => 'Something went wrong, please check error logs'], 500);
         }
     }
 
-    public function checkConnection(Request $request): Response
+    public function checkConnection(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
             if (Installer::db()->getConnection()) {
@@ -57,11 +55,11 @@ class InstallerController extends Controller
             return response()->json(['hasErrors' => true, 'message' => 'No connection could be made with database!']);
         } catch (\Exception $e) {
             Log::error($e);
-            return response()->json(['hasErrors' => true, 'message' => 'There is problem when trying to get connection with mysql. Check error logs'], 500);
+            return response()->json(['hasErrors' => true, 'message' => 'There is problem when trying to get connection with mysql. Check error logs']);
         }
     }
 
-    public function checkDatabase(Request $request): Response
+    public function checkDatabase(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
             if (Installer::db()->isDbEmpty()) {
@@ -74,7 +72,7 @@ class InstallerController extends Controller
         }
     }
 
-    public function dropTables(Request $request): Response
+    public function dropTables(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
             if (!Installer::db()->isDbEmpty()) {
@@ -88,7 +86,7 @@ class InstallerController extends Controller
         }
     }
 
-    public function createTables(Request $request): Response
+    public function createTables(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
             if (Installer::db()->isDbEmpty()) {
@@ -106,13 +104,14 @@ class InstallerController extends Controller
         }
     }
 
-    public function createDefaultGroups(Request $request): Response
+    public function createDefaultGroups(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
             if (!Installer::db()->isDbEmpty() && empty(Installer::db()->hasMissingTables()) && !Installer::db()::seeder()->hasUserGroup()
                 && !Installer::db()::seeder()->hasAdminGroup()) {
-                Installer::db()::seeder()->createUserGroup();
-                Installer::db()::seeder()->createAdminGroup();
+                $seeder = new Seeder();
+                $seeder->createAdminGroup();
+                $seeder->createUserGroup();
                 return response()->json(['success' => true, 'message' => 'Successfully created default user groups']);
             }
             return response()->json(['hasErrors' => true, 'message' => 'Default user groups already exists!']);
@@ -122,7 +121,7 @@ class InstallerController extends Controller
         }
     }
 
-    public function createAdminAccount(Request $request): Response
+    public function createAdminAccount(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
             if (!Installer::db()::seeder()->hasAdminUser() && Installer::db()::seeder()->hasAdminGroup() && Installer::db()::seeder()->hasUserGroup()) {
@@ -145,7 +144,8 @@ class InstallerController extends Controller
             return response()->json(['hasErrors' => true, 'message' => "There were errors when trying to create admin account. Please check error logs for more details"], 500);
         }
     }
-    public function createWebsiteSetting(Request $request) :Response {
+    public function createWebsiteSetting(Request $request) : \Illuminate\Http\JsonResponse
+    {
         try {
             if(!Installer::db()::seeder()->hasWebsiteSetting()) {
                 $data = $request->validate([
@@ -168,7 +168,8 @@ class InstallerController extends Controller
             return response()->json(['hasErrors' => true, 'message' => "Failed to create website settings, please check error logs for more details"], 500);
         }
     }
-    public function createLock(Request $request) :Response {
+    public function createLock(Request $request) : \Illuminate\Http\JsonResponse
+    {
         try {
             if(Installer::isInstalled() && !Installer::db()->hasMissingTables() && !Installer::isLocked())
             {
@@ -180,5 +181,9 @@ class InstallerController extends Controller
             Log::error($e);
             return response()->json(['hasErrors' => true, 'message' => 'There were some errors when trying to complete the installation. Please check error logs for more details'],500);
         }
+    }
+    public function isLocked(Request $request) : JsonResponse
+    {
+        return Installer::isLocked() ? response()->json(['is_locked' => true, 'message' => 'Installer lock exists. Please remove the lock file from /storage/app/install.lock to continue!']) : response()->json(['is_locked' => false, 'message' => "You can continue with installation"]);
     }
 }

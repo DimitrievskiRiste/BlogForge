@@ -89,7 +89,7 @@ class CategoriesController extends Controller
                 return response()->json(['hasError' => true, 'errors' => $errors], 400);
             }
     }
-    public function delete(Request $request) :Response
+    public function delete(Request $request) : JsonResponse
     {
         try {
             $data = $request->validate([

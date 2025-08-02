@@ -10,7 +10,7 @@ use Riste\AbstractRepository;
 
 class UserGroupsController extends Controller
 {
-    public function list(Request $request) :Response
+    public function list(Request $request) : \Illuminate\Http\JsonResponse
     {
         try{
             $offset = $request->get("offset",0);
@@ -28,7 +28,7 @@ class UserGroupsController extends Controller
     private function groupsRepo():AbstractRepository|\Exception{
         return $this->loadRepo("UserGroups");
     }
-    public function add(Request $request) :Response
+    public function add(Request $request) : \Illuminate\Http\JsonResponse
     {
         try {
             $data =  $request->validate([
@@ -69,7 +69,8 @@ class UserGroupsController extends Controller
             return response()->json(['hasErrors' => true, 'message' => 'Group failed to be created, check error logs'], 500);
         }
     }
-    public function edit(Request $request):Response {
+    public function edit(Request $request): \Illuminate\Http\JsonResponse
+    {
         try {
             $data =  $request->validate([
                 'group_id' => 'required|integer',
@@ -114,7 +115,8 @@ class UserGroupsController extends Controller
             return response()->json(['hasErrors' => true, 'message' => 'Group failed to be updated, check error logs'], 500);
         }
     }
-    public function delete(Request $request) :Response {
+    public function delete(Request $request) : \Illuminate\Http\JsonResponse
+    {
         try {
             $data = $request->validate(['group_id' => 'integer|required']);
             $model = UserGroups::query()->find($data);
